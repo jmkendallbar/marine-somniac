@@ -1,0 +1,10 @@
+Design:
+
+- Write EDF and labels to disk within a user-specified dirname
+    - this can be modified/initalized in the get started page
+    - the configurations will be specified in the same page
+    
+- each page is dependent on a Session/Analysis having been created
+    - user picks their analysis from the sidebar
+        - triggers session initialization from Sessio Manager object
+        - global warnings/errors depending on validation of the configurations
