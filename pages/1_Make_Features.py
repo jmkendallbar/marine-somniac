@@ -12,7 +12,7 @@ SessionConfig()
 SessionConfig.insert_logo()
 
 
-st.title('Placeholder')
+st.title('Compute Features')
 instruct.feature_generation()
 
 

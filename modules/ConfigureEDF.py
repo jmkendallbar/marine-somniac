@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 import modules.instructions as instruct
 from utils.SessionBase import SessionBase
 from utils.EDF import EDFutils
@@ -45,20 +45,39 @@ class ConfigureEDF(SessionBase):
             start = self.edf['start_ts']
             end = self.edf['end_ts']
 
-            c = st.columns([2, 2, 1, 2, 2])
+            c = st.columns([6, 1, 6])
+            c[0].markdown(f"EDF Start Timestamp: `{start}`")
+            c[2].write(f"EDF End Timestamp: `{end}`")
+
+            c = st.columns([2, 2, 2, 1, 2, 2, 2])
             start_date = c[0].date_input("Start Date",
                 value=start.date())
             start_time = c[1].time_input("Start Time",
-                value=start.time())
-            end_date = c[3].date_input("End Date",
-                value=end.date())
-            end_time = c[4].time_input("End Time",
-                value=end.time())
+                value=start.time(), step=60)
+            start_secs = c[2].number_input("Start Seconds",
+                value=start.second + start.microsecond/10**6,
+                min_value=0.0,
+                max_value=60.0,
+                step=1e-6,
+                format="%.6f")
             
-        self.time_range = (
-            datetime.combine(start_date, start_time),
-            datetime.combine(end_date, end_time)
-        )
+            end_date = c[4].date_input("End Date",
+                value=end.date())
+            end_time = c[5].time_input("End Time",
+                value=end.time(), step=60)
+            end_secs = c[6].number_input("End Seconds",
+                value=end.second + end.microsecond/10**6,
+                min_value=0.0,
+                max_value=60.0,
+                step=1e-6,
+                format="%.6f")
+            
+        user_start = datetime.combine(start_date, start_time)
+        user_start += timedelta(seconds=start_secs) 
+        user_end = datetime.combine(end_date, end_time)
+        user_end += timedelta(seconds=end_secs)
+
+        self.time_range = (user_start, user_end)
         
     def channel_mapping(self) -> None:
         picked_channels = st.multiselect(
@@ -136,5 +155,14 @@ class ConfigureEDF(SessionBase):
         if not all(self.channel_map.ch_type):
             return (False, "Ensure all channel types are specified"
                     'in the "Map Channels" menu')
+        if self.time_range[0] > self.time_range[1]:
+            return (False, f"Specified start time `{self.time_range[0]}` "
+                    "occurs after end time `{self.time_range[1]}`")
+        if self.time_range[0] < self.edf['start_ts']:
+            return (False, f"Specified start time `{self.time_range[0]}` " 
+                    f"occurs before EDF start time `{self.edf['start_ts']}`")
+        if self.time_range[1] > self.edf['end_ts']:
+            return (False, f"Specified end time `{self.time_range[1]}` "
+                    f"occurs after EDF end time `{self.edf['end_ts']}`")
         else:
             return (True, "Configuration valid, please confirm & save (will overwrite previous)")
