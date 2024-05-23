@@ -8,3 +8,4 @@ st.set_page_config(
     layout='wide'
 )
 SessionConfig()
+SessionConfig.insert_logo()

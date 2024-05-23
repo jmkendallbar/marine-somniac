@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_theme import st_theme
 import modules.instructions as instruct
 from utils.SessionBase import SessionBase
 
@@ -19,4 +20,12 @@ class SessionConfig(SessionBase):
     def set_session(self):
         if self.chosen_analysis:
             pass
+
+    @staticmethod
+    def insert_logo(sidebar=True):
+        theme = st_theme()['base']
+        if sidebar:
+            st.sidebar.image(f'assets/sidebar_logo_{theme}.jpeg')
+        else:
+            st.image(f'assets/logo_{theme}.jpeg')
 

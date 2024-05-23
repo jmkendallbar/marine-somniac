@@ -4,7 +4,6 @@ import modules.instructions as instruct
 from utils.SessionBase import SessionBase
 
 
-
 class ConfigureLabel(SessionBase):
     def __init__(self, analysis) -> None:
         self.analysis = analysis

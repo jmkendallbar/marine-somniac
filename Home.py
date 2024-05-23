@@ -1,4 +1,5 @@
 import streamlit as st
+from modules.ConfigureSession import SessionConfig
 from config import *
 
 __PAPER_LINK = ''
@@ -15,7 +16,7 @@ with title:
     st.title(APP_NAME)
     st.subheader('Sleep scoring for our aquatic pals')
 with image:
-    st.image('assets/logo_dark.jpeg', use_column_width=True)
+    SessionConfig.insert_logo(sidebar=False)
 
 
 st.markdown(

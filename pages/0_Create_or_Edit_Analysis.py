@@ -16,6 +16,7 @@ st.set_page_config(
     layout='wide'
 )
 session = SessionConfig(sidebar_widget=False)
+session.insert_logo()
 
 mode = st.radio(
     'Create or Edit',

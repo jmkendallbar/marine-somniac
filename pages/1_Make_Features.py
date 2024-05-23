@@ -9,8 +9,8 @@ st.set_page_config(
     layout='wide'
 )
 SessionConfig()
+SessionConfig.insert_logo()
 
-#----
 
 st.title('Placeholder')
 instruct.feature_generation()
