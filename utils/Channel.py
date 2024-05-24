@@ -7,7 +7,8 @@ import mne
 import wfdb.processing
 from sleepecg import detect_heartbeats
 from scipy.integrate import simpson
-from scipy.signal import welch, hann
+from scipy.signal import welch
+from scipy.signal.windows import hann
 
 
 class Channel:
